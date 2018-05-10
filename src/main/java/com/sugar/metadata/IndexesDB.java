@@ -17,7 +17,7 @@ public class IndexesDB {
 
 	public static final Map<String, CsvRow> EXERCISEDB = new ConcurrentHashMap<>();
 	public static final Map<String, CsvRow> FOODDB = new ConcurrentHashMap<>();
-
+	
 	public static void loadLookupData() {
 		loadExerciseLookupData();
 		loadFoodLookupData();
