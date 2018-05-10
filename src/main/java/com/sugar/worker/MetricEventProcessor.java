@@ -1,17 +1,14 @@
 package com.sugar.worker;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import com.sugar.dto.ExerciseMetricEvent;
+import com.sugar.dto.FoodMetricEvent;
+import com.sugar.dto.NormalizeMetricEvent;
+
 public class MetricEventProcessor {
-	
-	private static MetricEventProcessor _instance;
-	
-	private MetricEventProcessor() {
-	}
-	
-	public MetricEventProcessor getInstance() {
-		if (_instance == null)
-			_instance = new MetricEventProcessor();
-		
-		return _instance;
-	}
+	public static final Logger logger = LoggerFactory.getLogger(MetricEventProcessor.class);
+
 
 }
