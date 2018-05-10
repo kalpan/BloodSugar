@@ -53,7 +53,7 @@ public class MetricEventServiceTest {
 		}
 		
 	    @Test
-		public void processNormalizeEvent() {
+		public void processNormalizeEventNullCase() {
 	    	IndexesDB.loadLookupData();
 	    	FoodMetricEvent foodMetricEvent = new FoodMetricEvent();
 	    	foodMetricEvent.setMetricName("Baguette, white, plain");
@@ -64,5 +64,23 @@ public class MetricEventServiceTest {
 	    	BloodSugar bloodSugar = BloodSugarDB.getInstance().findByTs(normalizeMetricEvent.getTs());
 	    	System.out.println(normalizeMetricEvent.getTs());
 	    	assertEquals(bloodSugar, null);
+		}
+	    
+	    @Test
+		public void processNormalizeEvent() {
+	    	IndexesDB.loadLookupData();
+	    	FoodMetricEvent foodMetricEvent = new FoodMetricEvent();
+	    	foodMetricEvent.setMetricName("Baguette, white, plain");
+	    	metricEventService.processFoodEvent(foodMetricEvent);
+	    	
+	    	//We increased blood sugar beyond 80, let's reset times
+	    	BloodSugarDB.getInstance().getLastFoodTs().set(0L);
+	    	BloodSugarDB.getInstance().getLastExerciseTs().set(0L);
+	    	
+	    	NormalizeMetricEvent normalizeMetricEvent = new NormalizeMetricEvent();
+	    	metricEventService.processNormalizeEvent(normalizeMetricEvent);
+	    	BloodSugar bloodSugar = BloodSugarDB.getInstance().findByTs(normalizeMetricEvent.getTs());
+	    	System.out.println(normalizeMetricEvent.getTs());
+	    	assertEquals(bloodSugar.getTs(), normalizeMetricEvent.getTs());
 		}
 }
