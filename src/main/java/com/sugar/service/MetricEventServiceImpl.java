@@ -38,7 +38,7 @@ public class MetricEventServiceImpl implements MetricEventService {
 		Double rateOfIncrease = (double) csv.getIndex() / FOOD_RATE_DIVISOR_MINUTES;
 		Double bloodSugarIncreasePerMinute = rateOfIncrease * FOOD_DIRECTION;
 		long ts = foodMetricEvent.getTs();
-		BloodSugarDB.getInstance().getCurrentTs().addAndGet(ts);
+		BloodSugarDB.getInstance().getCurrentTs().set(ts);
 		for (int i = 0; i < FOOD_RATE_DIVISOR_MINUTES; i++) {
 			updateBloodSugar(bloodSugarIncreasePerMinute, ts);
 			ts = BloodSugarDB.getInstance().getCurrentTs().addAndGet(60_000L);
@@ -55,7 +55,7 @@ public class MetricEventServiceImpl implements MetricEventService {
 		Double rateOfDecrease = (double) csv.getIndex() / EXERCISE_RATE_DIVISOR_MINUTES;
 		Double bloodSugarDecreasePerMinute = rateOfDecrease * EXERCISE_DIRECTION;
 		long ts = exerciseMetricEvent.getTs();
-		BloodSugarDB.getInstance().getCurrentTs().addAndGet(ts);
+		BloodSugarDB.getInstance().getCurrentTs().set(ts);
 		for (int i = 0; i < EXERCISE_RATE_DIVISOR_MINUTES; i++) {
 			updateBloodSugar(bloodSugarDecreasePerMinute, ts);
 			ts = BloodSugarDB.getInstance().getCurrentTs().addAndGet(60_000L);
@@ -87,7 +87,6 @@ public class MetricEventServiceImpl implements MetricEventService {
 		this.lock.lock();
 		try {
 			currentBloodSugar += bloodSugarIncreasePerMinute;
-			ts = BloodSugarDB.getInstance().getCurrentTs().addAndGet(60_000L);
 			BloodSugarDB.getInstance().save(new BloodSugar(currentBloodSugar, ts));
 		} finally {
 			this.lock.unlock();
