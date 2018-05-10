@@ -25,7 +25,7 @@ public class MetricEventServiceImpl implements MetricEventService {
 	private static long EXERCISE_DIRECTION = -1L;
 	private static long FOOD_NORMALIZATION_TIME_DELTA = 3_600_000L;
 	private static long EXERCISE_NORMALIZATION_TIME_DELTA = 7_200_000L;
-
+	
 	private static Double currentBloodSugar = new Double(80L);
 	private final ReentrantLock lock = new ReentrantLock();
 
@@ -74,10 +74,12 @@ public class MetricEventServiceImpl implements MetricEventService {
 			return;
 		}
 
-		if (currentBloodSugar > 80D) {
-			updateBloodSugar(-1D, ts);
-		} else if (currentBloodSugar < 80D) {
-			updateBloodSugar(1D, ts);
+		synchronized (currentBloodSugar) {
+			if (currentBloodSugar > 80D) {
+				updateBloodSugar(-1D, ts);
+			} else if (currentBloodSugar < 80D) {
+				updateBloodSugar(1D, ts);
+			}
 		}
 		
 		logger.debug("Blood sugar change per minute:{} to {} at ts: {}", 1, currentBloodSugar, now);
