@@ -87,7 +87,9 @@ public class MetricEventServiceImpl implements MetricEventService {
 		this.lock.lock();
 		try {
 			currentBloodSugar += bloodSugarIncreasePerMinute;
-			BloodSugarDB.getInstance().save(new BloodSugar(currentBloodSugar, ts));
+			BloodSugar bloodSugar = new BloodSugar(currentBloodSugar, ts);
+			BloodSugarDB.getInstance().save(bloodSugar);
+			logger.debug("Saved : {}", bloodSugar);
 		} finally {
 			this.lock.unlock();
 		}

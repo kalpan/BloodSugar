@@ -52,7 +52,7 @@ public class MetricEventServiceTest {
 	    	assertEquals(bloodSugar.getTs(), exerciseMetricEvent.getTs());
 		}
 		
-	    //@Test - TBD
+	    @Test
 		public void processNormalizeEvent() {
 	    	IndexesDB.loadLookupData();
 	    	FoodMetricEvent foodMetricEvent = new FoodMetricEvent();
@@ -62,7 +62,7 @@ public class MetricEventServiceTest {
 	    	NormalizeMetricEvent normalizeMetricEvent = new NormalizeMetricEvent();
 	    	metricEventService.processNormalizeEvent(normalizeMetricEvent);
 	    	BloodSugar bloodSugar = BloodSugarDB.getInstance().findByTs(normalizeMetricEvent.getTs());
-	    	assertEquals(bloodSugar.getTs(), normalizeMetricEvent.getTs());
+	    	System.out.println(normalizeMetricEvent.getTs());
+	    	assertEquals(bloodSugar, null);
 		}
-
 }
